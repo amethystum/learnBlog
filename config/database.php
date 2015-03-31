@@ -26,8 +26,9 @@ return [
 	|
 	*/
 
-	'default' => 'mysql',
+	//'default' => 'mysql',
 
+	'default' => 'sqlite',
 	/*
 	|--------------------------------------------------------------------------
 	| Database Connections

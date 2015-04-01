@@ -1,12 +1,15 @@
 <h1>New MyArticles</h1>
-{{ Form::open() }}
+{!! Form::open(array('url' => 'articles')) !!}
   <p>
-    {{ Form::text('title') }}
+    {!! Form::text('title') !!}
   </p>
   <p>
-    {{ Form::text('text') }}
+    {!! Form::text('text') !!}
   </p>
   <p>
-    {{ Form::submit('submit') }}
+    {!! Form::submit('submit') !!}
   </p>
-{{ Form::close() }
+  {!! Form::close() !!}
+
+
+

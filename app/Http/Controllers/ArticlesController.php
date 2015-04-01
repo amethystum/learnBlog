@@ -2,8 +2,10 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Article as testModel;
 
 use Illuminate\Http\Request;
+use Input;
 
 class ArticlesController extends Controller {
 
@@ -35,7 +37,8 @@ class ArticlesController extends Controller {
 	 */
 	public function store()
 	{
-		//
+           $article = testModel::create(array('title'=>Input::get('title'), 'text'=>Input::get('text')));
+           return Redirect::route('articles.show', array($article->id));
 	}
 
 	/**

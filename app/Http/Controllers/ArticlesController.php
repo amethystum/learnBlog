@@ -2,11 +2,12 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Article as testModel;
+use App\Article;
 
 use Illuminate\Http\Request;
 use Input;
-
+use Redirect;
+use Validator;
 class ArticlesController extends Controller {
 
 	/**
@@ -17,6 +18,8 @@ class ArticlesController extends Controller {
 	public function index()
 	{
 		//
+		$articles = Article::all();
+		return view('articles.index', compact('articles'));
 	}
 
 	/**
@@ -37,7 +40,18 @@ class ArticlesController extends Controller {
 	 */
 	public function store()
 	{
-           $article = testModel::create(array('title'=>Input::get('title'), 'text'=>Input::get('text')));
+	   $rules = array('title' => 'required|min:5');
+
+        $validator = Validator::make(Input::all(), $rules);
+
+        if ($validator->fails())
+        {
+            return Redirect::route('articles.create')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+           $article = Article::create(array('title'=>Input::get('title'), 'text'=>Input::get('text')));
            return Redirect::route('articles.show', array($article->id));
 	}
 
@@ -50,6 +64,8 @@ class ArticlesController extends Controller {
 	public function show($id)
 	{
 		//
+		$article = Article::find($id);
+		return view('articles.show',compact('article'));
 	}
 
 	/**
@@ -61,18 +77,40 @@ class ArticlesController extends Controller {
 	public function edit($id)
 	{
 		//
+		$article = Article::find($id);
+
+        return view('articles.edit', compact('article'));
+
 	}
 
-	/**
-	 * Update the specified resource in storage.
+        /* 
+         * Update the specified resource in storage.
 	 *
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
-	{
-		//
-	}
+public function update($id)
+    {
+        $rules = array('title' => 'required|min:5');
+
+        $validator = Validator::make(Input::all(), $rules);
+	
+        $article = Article::find($id);
+
+        if ($validator->fails())
+        {
+            return Redirect::route('articles.edit',array($article))
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+
+        $article->title = Input::get('title');
+        $article->text = Input::get('text');
+        $article->save();
+
+        return Redirect::route('articles.show', array($article->id));
+    }
 
 	/**
 	 * Remove the specified resource from storage.
@@ -83,6 +121,9 @@ class ArticlesController extends Controller {
 	public function destroy($id)
 	{
 		//
+		Article::destroy($id);
+
+        return Redirect::route('articles.index');
 	}
 
 }

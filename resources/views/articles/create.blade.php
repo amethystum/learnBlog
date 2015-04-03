@@ -1,3 +1,5 @@
+@include('notifications')
+
 <h1>New MyArticles</h1>
 {!! Form::open(array('url' => 'articles')) !!}
   <p>
@@ -9,7 +11,7 @@
   <p>
     {!! Form::submit('submit') !!}
   </p>
-  {!! Form::close() !!}
-
+{!! Form::close() !!}
+{!! link_to_route('articles.index', 'Back') !!}
 
 
